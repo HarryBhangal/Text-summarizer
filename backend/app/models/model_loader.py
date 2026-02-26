@@ -1,22 +1,34 @@
 from transformers import pipeline
+import torch
 
-summarizer = pipeline(
-    "summarization",
-    model="t5-small"
-)
+class summarizer:
+    def __init__(self):
+        device = -1  #Ye Torch ko cpu pe run krwane ke liye
 
-def generate_summary(text, min_len=20, max_len=70):
-    return summarizer(
-        text,
-        min_length=min_len,
-        max_length=max_len,
-        do_sample=False
-    )[0]["summary_text"]
+        self.model = pipeline("summarization",
+                              model= "sshleifer/distilbart-cnn-12-6",
+                              device = device)
+    
+    def clean_text(self, text):  # Text clean krenge sirf space hata re hai
+        return " ".join(text.split())
+    
+    def chunk_text(self, text, max_words=400):  # Jo model chose kiya hai uski size kam hai to 400 words ki limit mai word lenge
+        words = text.split()
+        for i in range(0, len(words), max_words):
+            yield " ".join(words[i:i + max_words])
 
+    def generate_summary(self, text, min_len=30, max_len=120):  # Summary bnyge 
+        cleaned = self.clean_text(text)
+        summaries = []
 
-text = """Please use the search box at the top of this page or the links to the right. 
-Feel free to subscribe to our syndicated feeds.
-To fulfill the free license requirements, please read our Reuse guide. 
-You can also request a file or request permission for a file already on the internet."""
+        for chunk in self.chunk_text(cleaned): # Chunks mai save rkha tha na toh unko ab combine krna hai aur summary bnani hai
+            result = self.model(
+                chunk,
+                min_length=min_len,
+                max_length=max_len,
+                do_sample=False
+            )[0]["summary_text"]
 
-print(generate_summary(text))
+            summaries.append(result)
+
+        return " ".join(summaries)
