@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Summarizer</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="hdr">
+        <div class="hdrTop">
+          <div class="title">Text Summarizer</div>
+          <div id="statusPill" class="pill" aria-live="polite">Idle</div>
+        </div>
+        <div class="sub">Highlight text on the page, then summarize.</div>
+      </header>
+
+      <section class="card">
+        <div class="field">
+          <label class="lbl" for="endpoint">Backend endpoint</label>
+          <input id="endpoint" class="in" value="http://127.0.0.1:8000/summarize" />
+          <div class="hint">Backend must be running locally.</div>
+        </div>
+
+        <div class="row">
+          <button id="btnPaste" class="btn btnGhost" type="button">Load selection</button>
+          <button id="btnSummarize" class="btn" type="button">Summarize</button>
+        </div>
+
+        <div class="row rowTight">
+          <button id="btnClear" class="btn btnGhost" type="button">Clear</button>
+          <button id="btnCopy" class="btn btnGhost" type="button">Copy summary</button>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label class="lbl" for="inputText">Input</label>
+            <textarea id="inputText" class="ta" placeholder="(Loaded from selection, or paste here)"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="lbl" for="outputText">Summary</label>
+            <textarea id="outputText" class="ta taOut" readonly placeholder="Summary will appear here"></textarea>
+          </div>
+        </div>
+
+        <div id="status" class="status" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

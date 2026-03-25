@@ -1,20 +1,22 @@
-# backend/app/services/summarizer.py
+from __future__ import annotations
 
-from app.models.model_loader import load_model  # adjust import path if needed
+from functools import lru_cache
 
-#tokenizer, model = load_model()
+from app.models.model_loader import summarizer as Summarizer
 
-# def summarize_text(text: str) -> str:
-#     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=1024)
-    
-#     summary_ids = model.generate(
-#         inputs["input_ids"],
-#         max_length=150,
-#         min_length=40,
-#         length_penalty=2.0,
-#         num_beams=4,
-#         early_stopping=True
-#     )
-    
-#     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-#     return summary
+
+@lru_cache(maxsize=1)
+def _get_summarizer() -> Summarizer:
+    return Summarizer()
+
+
+def summarize_text(text: str) -> str:
+    cleaned = " ".join(text.split()).strip()
+    if not cleaned:
+        return ""
+
+    try:
+        return _get_summarizer().generate_summary(cleaned)
+    except Exception:
+        # Fallback if model can't load (first run, missing deps, etc.)
+        return cleaned[:600] + ("…" if len(cleaned) > 600 else "")
