@@ -18,7 +18,7 @@ async function getSelectedTextFromPage(tabId) {
 
 async function postSummary(endpoint, text) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 60000);
+  const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutes for initial download
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -160,6 +160,7 @@ function wire() {
   // Best-effort: prefill with current selection when popup opens.
   pasteSelection().catch(() => {
     setPill(pillEl, "Idle");
+    setStatus(statusEl, "");
   });
 }
 

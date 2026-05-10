@@ -3,11 +3,18 @@ import torch
 
 class summarizer:
     def __init__(self):
-        device = -1  #Ye Torch ko cpu pe run krwane ke liye
+        # Check if a GPU is available to make inference much faster
+        if torch.cuda.is_available():
+            device = 0
+            dtype = torch.float16
+        else:
+            device = -1
+            dtype = torch.float32
 
         self.model = pipeline("summarization",
-                              model= "sshleifer/distilbart-cnn-12-6",
-                              device = device)
+                              model="sshleifer/distilbart-cnn-12-6",
+                              device=device,
+                              torch_dtype=dtype)
     
     def clean_text(self, text):  # Text clean krenge sirf space hata re hai
         return " ".join(text.split())

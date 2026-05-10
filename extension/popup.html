@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text Summarizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
@@ -17,31 +20,34 @@
       </header>
 
       <section class="card">
-        <div class="field">
-          <label class="lbl" for="endpoint">Backend endpoint</label>
-          <input id="endpoint" class="in" value="http://127.0.0.1:8000/summarize" />
-          <div class="hint">Backend must be running locally.</div>
-        </div>
-
-        <div class="row">
-          <button id="btnPaste" class="btn btnGhost" type="button">Load selection</button>
-          <button id="btnSummarize" class="btn" type="button">Summarize</button>
-        </div>
-
-        <div class="row rowTight">
-          <button id="btnClear" class="btn btnGhost" type="button">Clear</button>
-          <button id="btnCopy" class="btn btnGhost" type="button">Copy summary</button>
-        </div>
+        <details class="endpoint-details">
+          <summary class="endpoint-summary">⚙️ Backend Configuration</summary>
+          <div class="field endpoint-field">
+            <label class="lbl" for="endpoint">Endpoint URL</label>
+            <input id="endpoint" class="in" value="http://127.0.0.1:8000/summarize" />
+            <div class="hint">Ensure the local FastAPI backend is running.</div>
+          </div>
+        </details>
 
         <div class="grid">
           <div class="field">
-            <label class="lbl" for="inputText">Input</label>
+            <label class="lbl" for="inputText">Source Text</label>
             <textarea id="inputText" class="ta" placeholder="(Loaded from selection, or paste here)"></textarea>
+          </div>
+
+          <div class="row">
+            <button id="btnPaste" class="btn btnGhost" type="button">Load Selection</button>
+            <button id="btnSummarize" class="btn" type="button">✨ Summarize</button>
           </div>
 
           <div class="field">
             <label class="lbl" for="outputText">Summary</label>
             <textarea id="outputText" class="ta taOut" readonly placeholder="Summary will appear here"></textarea>
+          </div>
+
+          <div class="row rowTight">
+            <button id="btnClear" class="btn btnGhost" type="button">Clear</button>
+            <button id="btnCopy" class="btn btnGhost" type="button">Copy to Clipboard</button>
           </div>
         </div>
 
